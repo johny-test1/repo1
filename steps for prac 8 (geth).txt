@@ -1,0 +1,78 @@
+establich connection beteen 2 nodes in geth
+
+initialize genesis in node 1 and then initatise for node 2
+
+create 2 folders mode 1 and node 2
+copy genesis file in both the folders
+
+node1 directory run this : 
+	E:\Users\mca23_017\node1>geth --datadir E:\Users\mca23_017\node1\data1 init genesis.json
+
+node2 directory run this : 
+	E:\Users\mca23_017\node2>geth --datadir E:\Users\mca23_017\node2\data2 init genesis.json
+
+then this : 
+	E:\Users\mca23_017\node1>geth --datadir E:\Users\mca23_017\node1\data1 --networkid 2345
+
+ipc:\\.\pipe\geth.ipc (--copy from output)
+
+(2nd cmd)
+
+	E:\Users\mca23_017\node1>geth attach ipc:\\.\pipe\geth.ipc
+
+
+(3rd cmd)
+	E:\Users\mca23_017\node2>geth --datadir E:\Users\mca23_017\node2\data2 --nodiscover --networkid 2345 --port 30304 --ipcdisable --authrpc.port 8552 console
+
+then this
+	> admin.nodeInfo.enode
+
+
+
+
+
+
+
+flow : 
+1) create 2 folders node 1 and node 2
+2) here we copied genesis file in both the folders , you can keep it at a location and give the same location 
+3) open cmd forn node 1 and run this
+	E:\Users\mca23_017\node1>geth --datadir E:\Users\mca23_017\node1\data1 init genesis.json
+this will create a data 1 folder in node 1 folder
+
+then in same command prompt run this but change the directory to node 2 : 
+	E:\Users\mca23_017\node2>geth --datadir E:\Users\mca23_017\node2\data2 init genesis.json
+then this : 
+	E:\Users\mca23_017\node1>geth --datadir E:\Users\mca23_017\node1\data1 --networkid 2345
+
+
+4) open another cmd prompt from node 1 and run this
+here the ipc addrese will get from previout output 
+
+	E:\Users\mca23_017\node1>geth attach ipc:\\.\pipe\geth.ipc
+
+5) open another command prompt
+	E:\Users\mca23_017\node2>geth --datadir E:\Users\mca23_017\node2\data2 --nodiscover --networkid 2345 --port 30304 --ipcdisable --authrpc.port 8552 console
+
+After running this run this 
+	admin.nodeInfo.enode
+
+copy enode id from abive output
+
+create a js file addnode.js i node 1 directory
+
+	admin.addPeer("(copied enode here)")
+	eg : admin.addPeer("enode://e42c833b15cfc1237a9358e583452f97ced19db5bd7c4a0b2555c0eba9dc052d8d062022d55ed1b09dc63c255ca1fb8f2c4d26230a5299850fb05a894856aeed@127.0.0.1:30304?discport=0")
+
+6) go back to sencod command prompt and run this
+
+	loadScript("e:/users/mca23_017/node1/addnode.js")
+
+then run this 
+	admin.peers
+then this 
+	admin.nodeInfo.enode
+
+youll get same enode
+
+
